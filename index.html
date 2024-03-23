@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Discord Activity</title>
+    <style>
+        body {
+            background-color: #fff; /* Default light mode background */
+            color: #000; /* Default light mode text color */
+        }
+        .dark-mode {
+            background-color: #111; /* Dark mode background */
+            color: #fff; /* Dark mode text color */
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Discord Activity</h1>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let x = 50;
+        let y = canvas.height / 2;
+        let dx = 2; // Horizontal velocity
+        const SQUARE_SIZE = 50;
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#FF0000'; // Red square
+            ctx.fillRect(x, y, SQUARE_SIZE, SQUARE_SIZE); // Draw a square at (x, y) position
+        }
+
+        function update() {
+            x += dx; // Move the square by dx pixels in each frame
+            if (x > canvas.width) {
+                x = 0; // Reset position when it reaches the end
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop(); // Start the game loop
+
+        // Movement controls
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') {
+                dx = 2; // Move right
+            } else if (event.key === 'ArrowLeft') {
+                dx = -2; // Move left
+            }
+        });
+
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>
