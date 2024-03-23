@@ -4,21 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Discord Activity</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #fff; /* Default light mode background */
-            color: #000; /* Default light mode text color */
+        /* Custom dark mode */
+        body.dark-mode {
+            background-color: #111;
+            color: #fff;
         }
-        .dark-mode {
-            background-color: #111; /* Dark mode background */
-            color: #fff; /* Dark mode text color */
+        /* Custom styling for canvas and header */
+        #gameCanvas {
+            border: 2px solid #fff;
+            margin: 20px 0;
+            background-color: #000;
+        }
+        h1 {
+            text-align: center;
+        }
+        /* Custom styling for dark mode toggle button */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        /* Custom styling for scoreboard */
+        .scoreboard {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.5rem;
         }
     </style>
 </head>
-<body>
-    <h1>Simple Discord Activity</h1>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+<body class="dark-mode">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Simple Discord Activity</h1>
+                <canvas id="gameCanvas" width="400" height="400"></canvas>
+                <div class="text-center">
+                    <button class="btn btn-light dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+                    <button class="btn btn-primary" onclick="authorizeDiscord()">Authorize Discord</button>
+                </div>
+                <div class="scoreboard">
+                    Score: <span id="score">0</span>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Info Panel</h5>
+                        <p class="card-text">This is some information about the game.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Controls</h5>
+                        <p class="card-text">Use arrow keys to move the square.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Discord Embedded App SDK -->
+    <script src="https://discord.com/assets/3b41dc0a8be036d17523eaa5e8bc86a2.js"></script>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -27,6 +83,7 @@
         let x = 50;
         let y = canvas.height / 2;
         let dx = 2; // Horizontal velocity
+        let score = 0;
         const SQUARE_SIZE = 50;
 
         function draw() {
@@ -39,6 +96,8 @@
             x += dx; // Move the square by dx pixels in each frame
             if (x > canvas.width) {
                 x = 0; // Reset position when it reaches the end
+                score++; // Increment score when square reaches the end
+                document.getElementById('score').textContent = score; // Update scoreboard
             }
         }
 
@@ -62,6 +121,14 @@
         // Dark mode toggle
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
+        }
+
+        // Authorize Discord
+        function authorizeDiscord() {
+            const clientId = '1220899817006305310'; // Replace with your Discord application's client ID
+            const redirectUri = encodeURIComponent('https://cgieric.com/'); // Replace with your website's redirect URI
+
+            window.location.href = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=rpc.activities.write`;
         }
     </script>
 </body>
